@@ -5,14 +5,14 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="../node_modules/marx-css/css/marx.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/marx-css/css/marx.min.css">
   <link rel="stylesheet" href="./style.css">
   <title>Login With TETR.IO</title>
 </head>
 
 <body>
   <main>
-    <form action="localhost:8000" id="login-form">
+    <form action="/api/login" method="POST" id="login-form">
       <h2>Login With TETR.IO</h2>
       <input type="text" name="username" placeholder="Username">
       <input type="password" name="password" placeholder="Password">
@@ -25,8 +25,6 @@
   </footer>
   <canvas id="background"></canvas>
 </body>
-
 <script src="./drawbg.js"></script>
-<script src="./form.js"></script>
 
 </html>
