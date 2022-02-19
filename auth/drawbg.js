@@ -6,7 +6,7 @@ const resize = () => {
   canvas.height = window.innerHeight;
 };
 const clearScreen = () => {
-  ctx.fillStyle = '#000';
+  ctx.fillStyle = '#fff';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 };
 

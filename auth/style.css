@@ -4,3 +4,35 @@ body {
   margin: 0%;
   padding: 0%;
 }
+
+body {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+main {
+  margin-top: 10vh;
+  border-radius: 5px;
+  backdrop-filter: blur(5px);
+  background-color: rgba(0, 0, 0, 0.1);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+footer {
+  margin: 0;
+  backdrop-filter: blur(5px);
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
