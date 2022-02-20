@@ -1,4 +1,5 @@
 import { Message } from 'discord.js';
+import ms from 'ms';
 import fetch from 'node-fetch';
 import Exists from '../interfaces/exists.js';
 import * as logger from '../utils/logger.js';
@@ -7,6 +8,7 @@ const config = {
   name: 'verify',
   description: 'Verifies that you own a TETR.IO account.',
   usage: ['verify', '<username>'],
+  cooldown: ms('30s'),
 };
 
 const invoke = (message: Message, args: string[]) => {

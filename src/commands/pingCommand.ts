@@ -4,6 +4,7 @@ const config = {
   name: 'ping',
   description: 'Ping!',
   usage: ['ping'],
+  cooldown: 0,
 };
 
 const invoke = (message: Message, args: string[]) => {
