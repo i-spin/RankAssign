@@ -1,2 +1,6 @@
 [bot]
-token = ""
+token = "ODgzMTkwNzA3MTk4NzY3MTk0.YTGVcQ.uAqXDSOaiNQXfarP8_LXr3wqk2E"
+prefix = ";"
+
+[server]
+port = "8000"
