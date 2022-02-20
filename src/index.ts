@@ -12,16 +12,22 @@ const config: Config = toml.parse(fs.readFileSync(path.join('config.toml'), 'utf
 const commands = new Map();
 
 fs.readdirSync(path.join(__dirname, 'commands')).forEach((file) => {
-  // eslint-disable-next-line global-require, import/no-dynamic-require
-  const command = require(path.join(__dirname, 'commands', file));
-  commands.set(command.config.name, command);
-  command.config.aliases.forEach((alias: string) => {
-    if (commands.has(alias)) {
-      logger.error(`Command ${alias} already exists for ${commands.get(alias).config.name}`);
-      return;
-    }
-    commands.set(alias, command);
-  });
+  try {
+    logger.info(`Trying to load ${file}.`);
+    // eslint-disable-next-line global-require, import/no-dynamic-require
+    const command = require(path.join(__dirname, 'commands', file));
+    commands.set(command.config.name, command);
+    command.config.aliases.forEach((alias: string) => {
+      if (commands.has(alias)) {
+        logger.error(`Command ${alias} already exists for ${commands.get(alias).config.name}`);
+        return;
+      }
+      commands.set(alias, command);
+    });
+    logger.info(`Loaded ${file}.`);
+  } catch (err) {
+    logger.error(`Failed to load command ${file}.`);
+  }
 });
 
 client.once('ready', () => {
