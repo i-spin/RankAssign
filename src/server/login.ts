@@ -3,8 +3,8 @@ import bodyParser from 'body-parser';
 import fs from 'graceful-fs';
 import path from 'path';
 import toml from 'toml';
-import Config from '../interfaces/config';
-import Login from '../interfaces/login';
+import Config from '../interfaces/config.js';
+import Login from '../interfaces/login.js';
 
 const config: Config = toml.parse(fs.readFileSync(path.join('config.toml'), 'utf8'));
 const app = express();

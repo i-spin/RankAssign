@@ -1,25 +1,30 @@
 import toml from 'toml';
 import fs from 'graceful-fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
+import {dirname} from 'path';
 import { Client, Intents } from 'discord.js';
-import * as logger from './utils/logger';
 
-import Config from './interfaces/config';
+import * as logger from './utils/logger.js';
+import Config from './interfaces/config.js';
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
 const config: Config = toml.parse(fs.readFileSync(path.join('config.toml'), 'utf8'));
 
-const commands = new Map();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
-fs.readdirSync(path.join(__dirname, 'commands')).forEach((file) => {
+const commands = new Map();
+fs.readdirSync(path.join(__dirname, 'commands')).forEach(async (file) => {
   try {
     logger.info(`Trying to load ${file}.`);
     // eslint-disable-next-line global-require, import/no-dynamic-require
-    const command = require(path.join(__dirname, 'commands', file));
+    const command = await import(path.join(__dirname, 'commands', file));
     commands.set(command.config.name, command);
     logger.info(`Loaded ${file}.`);
-  } catch (err) {
+  } catch (err: any) {
     logger.error(`Failed to load command ${file}.`);
+    logger.error(err.toString());
   }
 });
 
