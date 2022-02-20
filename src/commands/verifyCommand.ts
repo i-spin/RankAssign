@@ -14,8 +14,8 @@ const invoke = (message: Message, args: string[]) => {
     message.reply(`Missing arguments! Usage: \`${config.usage.join(' ')}\``);
   }
   fetch(`https://tetr.io/api/users/${args[0]}/exists`)
-    .then(res => res.json())
-    .then(data => {
+    .then((res) => res.json())
+    .then((data) => {
       if (!(data as Exists).success) {
         message.reply(`Failed to verify ${args[0]}, try again later.`);
       }
@@ -25,7 +25,7 @@ const invoke = (message: Message, args: string[]) => {
         message.reply(`${args[0]} is verified!`);
       }
     })
-    .catch(err => {
+    .catch((err) => {
       logger.error(err);
       message.reply('Failed to verify, try again later.');
     });

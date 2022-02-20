@@ -1,4 +1,4 @@
-import chalk from "chalk";
+import chalk from 'chalk';
 
 /* eslint-disable no-console */
 const info = (message: string) => console.log(`${chalk.cyan('[INFO]')} ${message}`);

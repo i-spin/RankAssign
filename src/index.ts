@@ -1,8 +1,8 @@
+/* eslint-disable no-underscore-dangle */
 import toml from 'toml';
 import fs from 'graceful-fs';
-import path from 'path';
 import { fileURLToPath } from 'url';
-import {dirname} from 'path';
+import path from 'path';
 import { Client, Intents } from 'discord.js';
 
 import * as logger from './utils/logger.js';
@@ -12,7 +12,7 @@ const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_
 const config: Config = toml.parse(fs.readFileSync(path.join('config.toml'), 'utf8'));
 
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const __dirname = path.dirname(__filename);
 
 const commands = new Map();
 fs.readdirSync(path.join(__dirname, 'commands')).forEach(async (file) => {
