@@ -1,6 +1,0 @@
-[bot]
-token = ""
-prefix = ";"
-
-[server]
-port = "8000"
