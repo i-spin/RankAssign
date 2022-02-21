@@ -58,7 +58,6 @@ const addUser = (discord: string, tetrio: string, rank: string) => {
   save();
 };
 
-
 export {
   fakeFile,
   load,
