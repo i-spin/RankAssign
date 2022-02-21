@@ -42,6 +42,7 @@ const fakeFile = () => {
             },
           },
         ],
+        roles: new Map().set('H', '000000000000000000'),
       },
     ],
   };
@@ -49,10 +50,12 @@ const fakeFile = () => {
 };
 
 const addUser = (guild: string, discord: string, tetrio: string, rank: string) => {
+  load();
   if (!database.guild.find((g) => g.id === guild)) {
     database.guild.push({
       id: guild,
       users: [],
+      roles: new Map().set('H', '000000000000000000'),
     });
   }
   database.guild.find((g) => g.id === guild)?.users.push({
@@ -67,7 +70,16 @@ const addUser = (guild: string, discord: string, tetrio: string, rank: string) =
   save();
 };
 
-const get = () => database;
+const get = () => {
+  load();
+  return database;
+};
+
+const addRole = (guild: string, id: string, name: string) => {
+  load();
+  database.guild.find((g) => g.id === guild)?.roles.set(id, name);
+  save();
+};
 
 export {
   get,
@@ -75,4 +87,5 @@ export {
   load,
   save,
   addUser,
+  addRole,
 };

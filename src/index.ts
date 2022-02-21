@@ -1,4 +1,3 @@
-import yaml from 'yaml';
 import fs from 'graceful-fs';
 import { fileURLToPath } from 'url';
 import path from 'path';
@@ -8,20 +7,20 @@ import ms from 'ms';
 import * as logger from './utils/logger.js';
 import * as database from './utils/database.js';
 import Config from './interfaces/config.js';
+import * as config from './utils/config.js';
 import app from './server/login.js';
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
-const config: Config = yaml.parse(fs.readFileSync(path.join(dirname, '../config.yml'), 'utf8'));
+const botConfig: Config = config.get();
 
 const commands = new Map();
 const lastUsed = new Map();
 
 fs.readdirSync(path.join(dirname, 'commands')).forEach(async (file) => {
   try {
-    logger.info(`Trying to load ${file}.`);
     // eslint-disable-next-line global-require, import/no-dynamic-require
     const command = await import(path.join(dirname, 'commands', file));
     commands.set(command.config.name, command);
@@ -37,8 +36,8 @@ logger.info('Loading database...');
 database.load();
 
 logger.info('Starting express server...');
-app.listen(config.server.port, () => {
-  logger.info(`Listening on port ${config.server.port}.`);
+app.listen(botConfig.server.port, () => {
+  logger.info(`Listening on port ${botConfig.server.port}.`);
 });
 
 client.once('ready', () => {
@@ -47,10 +46,10 @@ client.once('ready', () => {
 });
 
 client.on('message', (message) => {
-  if (!message.content.startsWith(config.bot.prefix) || message.author.bot) return;
+  if (!message.content.startsWith(botConfig.bot.prefix) || message.author.bot) return;
 
-  const args = message.content.slice(config.bot.prefix.length).split(/ +/);
-  const name = args.shift()?.toLowerCase();
+  const args = message.content.slice(botConfig.bot.prefix.length).split(/ +/);
+  const name = args.shift();
   if (!commands.has(name)) return;
   const command = commands.get(name);
   if ((Date.now() - lastUsed.get(name)) < command.config.cooldown) {
@@ -61,7 +60,7 @@ client.on('message', (message) => {
   lastUsed.set(name, Date.now());
 });
 
-client.login(config.bot.token);
+client.login(botConfig.bot.token);
 
 export {
   // eslint-disable-next-line import/prefer-default-export
