@@ -69,7 +69,7 @@ export interface Zen {
 }
 
 export interface Records {
-  "40l": N40l
+  '40l': N40l
   blitz: Blitz
 }
 
