@@ -6,14 +6,15 @@ import { Client, Intents } from 'discord.js';
 import ms from 'ms';
 
 import * as logger from './utils/logger.js';
+import * as database from './utils/database.js';
 import Config from './interfaces/config.js';
 import app from './server/login.js';
 
-const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
-const config: Config = yaml.parse(fs.readFileSync(path.join('config.yml'), 'utf8'));
-
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
+
+const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
+const config: Config = yaml.parse(fs.readFileSync(path.join(dirname, '../config.yml'), 'utf8'));
 
 const commands = new Map();
 const lastUsed = new Map();
@@ -32,12 +33,16 @@ fs.readdirSync(path.join(dirname, 'commands')).forEach(async (file) => {
   }
 });
 
+logger.info('Loading database...');
+database.load();
+
+logger.info('Starting express server...');
+app.listen(config.server.port, () => {
+  logger.info(`Listening on port ${config.server.port}.`);
+});
+
 client.once('ready', () => {
   logger.info(`Loaded ${commands.size} commands.`);
-  logger.info('Starting express server...');
-  app.listen(config.server.port, () => {
-    logger.info(`Listening on port ${config.server.port}.`);
-  });
   client.user?.setPresence({ activities: [{ name: 'on TETR.IO', type: 'COMPETING' }], status: 'online' });
 });
 

@@ -12,19 +12,19 @@ const dirname = path.dirname(filename);
 const app = express();
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
 
-app.use('/', express.static(path.join(dirname, 'auth')));
+app.use('/', express.static(path.join(dirname, '../../src/server/auth')));
 
 app.get('/', (req, res) => {
-  res.sendFile(path.join(dirname, 'auth', 'index.html'));
+  res.sendFile(path.join(dirname, '../../src/server/auth/index.html'));
 });
 
 app.post('/login', urlencodedParser, (req, res) => {
   const data: Login = req.body;
-  if (!fs.existsSync(path.join(dirname, 'temp', `${data.token}.json`))) {
+  if (!fs.existsSync(path.join(dirname, '../../temp', `${data.token}.json`))) {
     res.sendStatus(403);
     return;
   }
-  fs.writeFileSync(path.join(dirname, 'temp', `${data.token}.json`), JSON.stringify(data));
+  fs.writeFileSync(path.join(dirname, '../../temp', `${data.token}.json`), JSON.stringify(data));
   res.sendStatus(200);
 });
 

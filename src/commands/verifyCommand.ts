@@ -4,7 +4,9 @@ import fs from 'graceful-fs';
 import { fileURLToPath } from 'url';
 import path from 'path';
 import Login from '../interfaces/login.js';
+
 import { authenticate, exists, me } from '../utils/tetrio.js';
+import * as database from '../utils/database.js';
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -19,6 +21,7 @@ const config = {
 const invoke = async (message: Message, args: string[]) => {
   if (args.length === 0) {
     message.reply(`Missing arguments! Usage: \`${config.usage.join(' ')}\``);
+    return;
   }
 
   let thread: ThreadChannel;
@@ -44,14 +47,14 @@ const invoke = async (message: Message, args: string[]) => {
     return;
   }
 
-  fs.writeFileSync(path.join(dirname, '../server/temp', `${message.createdTimestamp}.json`), '');
+  fs.writeFileSync(path.join(dirname, '../../temp', `${message.createdTimestamp}.json`), '');
   thread.send(`Paste this as the token into the verification website: ${message.createdTimestamp}`);
 
-  fs.watchFile(path.join(dirname, '../server/temp', `${message.createdTimestamp}.json`), async () => {
+  fs.watchFile(path.join(dirname, '../../temp', `${message.createdTimestamp}.json`), async () => {
     // already done
-    if (!fs.existsSync(path.join(dirname, '../server/temp', `${message.createdTimestamp}.json`))) return;
+    if (!fs.existsSync(path.join(dirname, '../../temp', `${message.createdTimestamp}.json`))) return;
 
-    const current = fs.readFileSync(path.join(dirname, '../server/temp', `${message.createdTimestamp}.json`), 'utf8');
+    const current = fs.readFileSync(path.join(dirname, '../../temp', `${message.createdTimestamp}.json`), 'utf8');
     const loginData: Login = JSON.parse(current);
 
     let token;
@@ -75,7 +78,12 @@ const invoke = async (message: Message, args: string[]) => {
       }
       if (userData.user.connections.discord.username === `${message.author.username}#${message.author.discriminator}`) {
         thread.send('Successfully verified account.');
-        fs.unlinkSync(path.join(dirname, '../server/temp', `${message.createdTimestamp}.json`));
+        database.addUser(
+          message.author.id.toString(),
+          userData.user.username,
+          userData.user.league.rank,
+        );
+        fs.unlinkSync(path.join(dirname, '../../temp', `${message.createdTimestamp}.json`));
         return;
       }
     } catch (err: any) {
