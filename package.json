@@ -11,7 +11,7 @@
     "typescript": "^4.7.0-dev.20220219"
   },
   "scripts": {
-    "copy": "cp -R src/server/auth build/server && cp config.toml build",
+    "copy": "cp -R src/server/auth build/server && cp -R src/server/temp build/server && cp config.toml build",
     "build": "node_modules/.bin/tsc && yarn copy",
     "lint": "node_modules/.bin/eslint \"src/**/*.ts\"",
     "clean": "rm -rf build",

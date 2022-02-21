@@ -1,4 +1,3 @@
-/* eslint-disable no-underscore-dangle */
 import toml from 'toml';
 import fs from 'graceful-fs';
 import { fileURLToPath } from 'url';
@@ -12,17 +11,17 @@ import Config from './interfaces/config.js';
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
 const config: Config = toml.parse(fs.readFileSync(path.join('config.toml'), 'utf8'));
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const filename = fileURLToPath(import.meta.url);
+const dirname = path.dirname(filename);
 
 const commands = new Map();
 const lastUsed = new Map();
 
-fs.readdirSync(path.join(__dirname, 'commands')).forEach(async (file) => {
+fs.readdirSync(path.join(dirname, 'commands')).forEach(async (file) => {
   try {
     logger.info(`Trying to load ${file}.`);
     // eslint-disable-next-line global-require, import/no-dynamic-require
-    const command = await import(path.join(__dirname, 'commands', file));
+    const command = await import(path.join(dirname, 'commands', file));
     commands.set(command.config.name, command);
     lastUsed.set(command.config.name, 0);
     logger.info(`Loaded ${file}.`);
