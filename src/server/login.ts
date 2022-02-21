@@ -2,12 +2,10 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import fs from 'graceful-fs';
 import path from 'path';
-import yaml from 'yaml';
 import { fileURLToPath } from 'url';
-import Config from '../interfaces/config.js';
+
 import Login from '../interfaces/login.js';
 
-const config: Config = yaml.parse(fs.readFileSync(path.join('config.toml'), 'utf8'));
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
@@ -30,4 +28,4 @@ app.post('/login', urlencodedParser, (req, res) => {
   res.sendStatus(200);
 });
 
-app.listen(config.server.port);
+export default app;

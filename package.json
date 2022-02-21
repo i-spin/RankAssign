@@ -15,8 +15,7 @@
     "build": "node_modules/.bin/tsc && yarn copy",
     "lint": "node_modules/.bin/eslint \"src/**/*.ts\"",
     "clean": "rm -rf build",
-    "run-bot": "node build/index.js",
-    "run-server": "node build/server/login.js"
+    "dev": "node build/index.js"
   },
   "name": "rankassign",
   "version": "1.0.0",

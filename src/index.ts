@@ -7,6 +7,7 @@ import ms from 'ms';
 
 import * as logger from './utils/logger.js';
 import Config from './interfaces/config.js';
+import app from './server/login.js';
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
 const config: Config = yaml.parse(fs.readFileSync(path.join('config.yml'), 'utf8'));
@@ -32,6 +33,11 @@ fs.readdirSync(path.join(dirname, 'commands')).forEach(async (file) => {
 });
 
 client.once('ready', () => {
+  logger.info(`Loaded ${commands.size} commands.`);
+  logger.info('Starting express server...');
+  app.listen(config.server.port, () => {
+    logger.info(`Listening on port ${config.server.port}.`);
+  });
   client.user?.setPresence({ activities: [{ name: 'on TETR.IO', type: 'COMPETING' }], status: 'online' });
 });
 
@@ -51,3 +57,8 @@ client.on('message', (message) => {
 });
 
 client.login(config.bot.token);
+
+export {
+  // eslint-disable-next-line import/prefer-default-export
+  commands,
+};
