@@ -14,7 +14,7 @@ let database: Database;
 const load = () => {
   database = yaml.parse(fs.readFileSync(path.join(dirname, '../../db.yml'), 'utf8'));
   try {
-    !database.users ? fakeFile() : null;
+    if (!database.guild) fakeFile();
   } catch (err) {
     logger.error('Database is empty or corrupted, regenerating database...');
     fakeFile();
@@ -28,37 +28,49 @@ const save = () => {
 
 const fakeFile = () => {
   database = {
-    users: [
+    guild: [
       {
-        discord: {
-          handle: '000000000000000000',
-        },
-        tetrio: {
-          handle: 'Wumpus',
-          rank: 'X',
-        },
+        id: '000000000000000000',
+        users: [
+          {
+            discord: {
+              handle: '000000000000000000',
+            },
+            tetrio: {
+              handle: 'Wumpus',
+              rank: 'X',
+            },
+          },
+        ],
       },
     ],
   };
   save();
 };
 
-const addUser = (discord: string, tetrio: string, rank: string) => {
-  database.users.push(
-    {
-      discord: {
-        handle: discord,
-      },
-      tetrio: {
-        handle: tetrio,
-        rank,
-      },
+const addUser = (guild: string, discord: string, tetrio: string, rank: string) => {
+  if (!database.guild.find((g) => g.id === guild)) {
+    database.guild.push({
+      id: guild,
+      users: [],
+    });
+  }
+  database.guild.find((g) => g.id === guild)?.users.push({
+    discord: {
+      handle: discord,
     },
-  );
+    tetrio: {
+      handle: tetrio,
+      rank,
+    },
+  });
   save();
 };
 
+const get = () => database;
+
 export {
+  get,
   fakeFile,
   load,
   save,

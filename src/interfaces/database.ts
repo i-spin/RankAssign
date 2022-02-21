@@ -12,8 +12,12 @@ interface User {
   tetrio: Tetrio,
 }
 
+interface Guild {
+  id: string,
+  users: User[],
+}
 interface Database {
-  users: User[]
+  guild: Guild[],
 }
 
 export {

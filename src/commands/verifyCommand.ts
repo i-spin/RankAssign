@@ -79,6 +79,7 @@ const invoke = async (message: Message, args: string[]) => {
       if (userData.user.connections.discord.username === `${message.author.username}#${message.author.discriminator}`) {
         thread.send('Successfully verified account.');
         database.addUser(
+          message.guildId ?? '000000000000000000',
           message.author.id.toString(),
           userData.user.username,
           userData.user.league.rank,
