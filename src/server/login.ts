@@ -2,12 +2,12 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import fs from 'graceful-fs';
 import path from 'path';
-import toml from 'toml';
+import yaml from 'yaml';
 import { fileURLToPath } from 'url';
 import Config from '../interfaces/config.js';
 import Login from '../interfaces/login.js';
 
-const config: Config = toml.parse(fs.readFileSync(path.join('config.toml'), 'utf8'));
+const config: Config = yaml.parse(fs.readFileSync(path.join('config.toml'), 'utf8'));
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 

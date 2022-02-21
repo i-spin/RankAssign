@@ -1,4 +1,4 @@
-import toml from 'toml';
+import yaml from 'yaml';
 import fs from 'graceful-fs';
 import { fileURLToPath } from 'url';
 import path from 'path';
@@ -9,7 +9,7 @@ import * as logger from './utils/logger.js';
 import Config from './interfaces/config.js';
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
-const config: Config = toml.parse(fs.readFileSync(path.join('config.toml'), 'utf8'));
+const config: Config = yaml.parse(fs.readFileSync(path.join('config.yml'), 'utf8'));
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
