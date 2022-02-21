@@ -17,7 +17,6 @@ const invoke = (message: Message, args: string[]) => {
     .filter((g) => g.id === message.guildId)
     .flatMap((g) => g.users)
     .find((u) => u.discord.handle === args[0] || u.tetrio.handle === args[0]);
-  console.log(result);
 
   if (!result) {
     message.reply('User not found!');
