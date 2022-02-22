@@ -80,7 +80,7 @@ const invoke = async (message: Message, args: string[]) => {
         thread.send('Successfully verified account.');
         database.addUser(
           message.guildId ?? '000000000000000000',
-          message.author.id.toString(),
+          message.author.id,
           userData.user.username,
           userData.user.league.rank,
         );
