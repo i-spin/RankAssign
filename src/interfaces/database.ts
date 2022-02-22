@@ -15,7 +15,6 @@ interface User {
 interface Guild {
   id: string,
   users: User[],
-  roles: Map<string, string>,
 }
 interface Database {
   guild: Guild[],

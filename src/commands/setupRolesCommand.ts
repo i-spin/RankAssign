@@ -1,7 +1,5 @@
 import { Message } from 'discord.js';
 
-import * as database from '../utils/database.js';
-
 const config = {
   name: 'setupRoles',
   description: 'Setup all the roles for ranks',
@@ -36,14 +34,11 @@ const invoke = (message: Message, _args: string[]) => {
   try {
     roles.forEach((value, key: string) => {
       if (message.guild?.roles.cache.find((r) => r.name === key)) {
-        database.addRole(message.guild.id ?? '', key, message.guild.roles.cache.find((r) => r.name === key)?.id ?? '');
         return;
       }
       message.guild?.roles.create({
         name: key,
         color: value,
-      }).then((role) => {
-        database.addRole(message.guild?.id ?? '000000000000000000', role.id, key);
       });
     });
   } catch (err: any) {
