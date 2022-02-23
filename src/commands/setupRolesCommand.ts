@@ -30,7 +30,8 @@ const invoke = (message: Message, _args: string[]) => {
     .set('C', '#723f8f')
     .set('C-', '#826498')
     .set('D+', '#80587f')
-    .set('D', '#937895');
+    .set('D', '#937895')
+    .set('Unranked', '#0a0a0a');
   try {
     roles.forEach((value, key: string) => {
       if (message.guild?.roles.cache.find((r) => r.name === key)) {

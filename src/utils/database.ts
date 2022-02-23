@@ -68,6 +68,20 @@ const addUser = (guild: string, discord: string, tetrio: string, rank: string) =
   save();
 };
 
+const getUserById = (discordID: string) => {
+  load();
+  return database.guild
+    .flatMap((guild) => guild.users)
+    .find((user) => user.discord.handle === discordID);
+};
+
+const getUserByTetrio = (tetrioHandle: string) => {
+  load();
+  return database.guild
+    .flatMap((guild) => guild.users)
+    .find((user) => user.tetrio.handle === tetrioHandle);
+};
+
 const get = () => {
   load();
   return database;
@@ -79,4 +93,6 @@ export {
   load,
   save,
   addUser,
+  getUserById,
+  getUserByTetrio,
 };
