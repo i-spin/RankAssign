@@ -7,6 +7,7 @@ import Login from '../interfaces/login.js';
 
 import { authenticate, exists, me } from '../utils/tetrio.js';
 import * as database from '../utils/database.js';
+import { TetraUser } from '../interfaces/tetraUser.js';
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -14,11 +15,30 @@ const dirname = path.dirname(filename);
 const config = {
   name: 'verify',
   description: 'Verifies that you own a TETR.IO account.',
-  usage: ['verify', '<username>'],
+  usage: ['verify', '<discordID>', '<tetrioUsername>'],
   cooldown: ms('30s'),
 };
 
 const invoke = async (message: Message, args: string[]) => {
+  if (!message.member?.permissions.has('MANAGE_ROLES')) {
+    message.reply('You do not have permission to use this command.');
+  }
+  const tetraUser: TetraUser = await ((await fetch(`https://ch.tetr.io/api/users/${args[2]}`)).json());
+  if (!tetraUser.success) {
+    message.reply('Invalid username.');
+    return;
+  }
+  database.addUser(
+    message.guildId ?? '000000000000000000',
+    args[0],
+    tetraUser.data.user.username,
+    tetraUser.data.user.league.rank,
+  );
+  message.reply(`Added ${args[2]} to the database.`);
+};
+
+// eslint-disable-next-line no-unused-vars
+const old = async (message: Message, args: string[]) => {
   if (args.length === 0) {
     message.reply(`Missing arguments! Usage: \`${config.usage.join(' ')}\``);
     return;
