@@ -2,9 +2,12 @@ import yaml from "https://esm.sh/yaml@next";
 import * as harmony from "https://deno.land/x/harmony@v2.6.0/mod.ts";
 import commands from "./controllers/commandController.ts";
 import IConfig from "./interfaces/config.ts";
+import initDB from "./controllers/databaseController.ts";
 
 const client = new harmony.Client();
 const config: IConfig = yaml.parse(Deno.readTextFileSync("config.yml"));
+initDB();
+
 const intents = [
   harmony.GatewayIntents.GUILDS,
   harmony.GatewayIntents.GUILD_MESSAGES,

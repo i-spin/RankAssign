@@ -12,6 +12,7 @@ const config = {
   description: "Ping!",
   enabled: true,
   cooldown: 0,
+  usage: ["ping"],
 };
 
 export { config, invoke };
