@@ -20,18 +20,21 @@ client.once("ready", () => {
 client.on("messageCreate", (message) => {
   if (message.author.bot) return;
 
-  const prefix = "!";
+  const prefix = config.prefix;
   const content = message.content.trim();
   const args = content.slice(prefix.length).split(/ +/);
   const commandName = args.shift();
 
-  if (!content.startsWith(prefix)) return;
+  if (!content.startsWith(prefix) || message.author.bot) return;
 
   const command = commands.find((command) =>
     command.config.name === commandName
   );
 
-  if (!command) return;
+  if (!command) {
+    message.reply("Unknown command.");
+    return;
+  }
 
   if (command.config.enabled === false) {
     message.reply("This command is disabled.");
