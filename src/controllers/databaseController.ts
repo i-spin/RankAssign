@@ -15,6 +15,10 @@ const initDB = () => {
   database.link([Users]);
   database.sync();
 
+  Users.count().then((count) => {
+    console.log(`Connected to database with ${count} users.`);
+  });
+
   return database;
 };
 
