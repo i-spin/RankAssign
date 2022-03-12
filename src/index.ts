@@ -27,21 +27,25 @@ client.on("messageCreate", (message) => {
 
   if (!content.startsWith(prefix) || message.author.bot) return;
 
-  const command = commands.find((command) =>
-    command.config.name === commandName
-  );
+  try {
+    const command = commands.find((command) =>
+      command.config.name === commandName
+    );
 
-  if (!command) {
-    message.reply("Unknown command.");
-    return;
+    if (!command) {
+      message.reply("Unknown command.");
+      return;
+    }
+
+    if (command.config.enabled === false) {
+      message.reply("This command is disabled.");
+      return;
+    }
+
+    command.invoke(message, args);
+  } catch (e) {
+    message.reply(e);
   }
-
-  if (command.config.enabled === false) {
-    message.reply("This command is disabled.");
-    return;
-  }
-
-  command.invoke(message, args);
 });
 
 client.connect(config.token, intents);
